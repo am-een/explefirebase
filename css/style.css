@@ -1,0 +1,13 @@
+html, body, map {
+	height: 100%; margin: 0; padding: 0;
+}
+.btn{
+	margin-top: -10%;
+	margin-left: 90%;
+	position: fixed;
+	font-size: 28px;
+}
+
+.infoWin{
+	padding: 0;
+}
