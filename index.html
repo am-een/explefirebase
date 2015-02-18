@@ -10,7 +10,7 @@
     <div ng-repeat="demand in demands">
     <marker id="{{demand.$id}}" position="{{demand.latt}}, {{demand.lng}}" title="{{demand.comp}}" on-click="showInfoWindow(event, '{{demand.$id}}')"></marker>
       <info-window max-width="300" id="{{demand.$id}}" visible-on-marker="{{demand.$id}}">
-        <div>
+        <div ng-cloak>
           <div id="firstHeading" class="firstHeading">
             <h2>
               <span>{{demand.comp}}</span>
