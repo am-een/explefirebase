@@ -1,6 +1,6 @@
 var myApp = angular.module('myApp', ['ngMap', 'ngMaterial', 'angularReverseGeocode', 'firebase']);
 
-myApp.controller('AppCtrl',  function($scope, $mdDialog, $firebase) {
+myApp.controller('AppCtrl',  function($scope, $mdDialog, $firebase, $mdToast) {
 
   $scope.demand = {};
   var map;
@@ -12,42 +12,73 @@ myApp.controller('AppCtrl',  function($scope, $mdDialog, $firebase) {
   $scope.demands = fb.$asArray();
   //endFirebase
 
-  $scope.addDemand = function(x,y){
-    $mdDialog.hide();
-    $scope.demand.latt = x;
-    $scope.demand.lng = y;
-    $scope.demands.$add($scope.demand);
-  }
+
+  var dialogContent = '\
+        <md-content> \
+          <md-subheader class="md-primary md-sticky-no-effect"> \
+          <h2>Add request</h2> \
+          </md-subheader> \
+            <md-input-container> \
+                <label>Company</label> \
+                <input required name="comp" ng-model="demand.comp"> \
+            </md-input-container> \
+            <md-input-container> \
+                <label>First Name</label> \
+                <input required name="firstName" ng-model="demand.firstName"> \
+            </md-input-container> \
+            <md-input-container> \
+                <label>Last Name</label> \
+                <input required name="lastName" ng-model="demand.lastName"> \
+            </md-input-container> \
+            <md-input-container> \
+                <label>Description</label> \
+                <textarea required name="description" ng-model="demand.description" columns="3" md-maxlength="200"></textarea> \
+            </md-input-container> \
+        </md-content> \
+        <div class="md-actions"> \
+            <!-- type=button is needed so form uses submit button --> \
+            <md-button type=button ng-click="cancel()">Cancel</md-button> \
+            <md-button class="md-primary" type="submit" ng-click="hide()">Okay</md-button> \
+        </div> \
+        ';
+
+    var addDemDialog = '<md-dialog aria-label="Add request">' + dialogContent + '</md-dialog>';
+
   $scope.$on('mapInitialized', function(evt, evtMap) {
       map = evtMap;
       $scope.placeMarker = function(e,ev) {
-              $mdDialog.show({
-                  controller: DialogController,
-                  scope:$scope,
-                  targetEvent: ev,
-                  templateUrl: 'add.html',
-
-                })
-                  .then(function(answer){
-                    $scope.addDemand(e.latLng.k,e.latLng.D);
-                    var marker = new google.maps.Marker({position: e.latLng, map: map});
-                    map.panTo(e.latLng);
-                  },function() {
-                  });
+            $mdDialog.show({
+                template: addDemDialog,
+                targetEvent: ev,
+                locals: { locLatt: e.latLng.k,
+                          locLng:e.latLng.D },
+                controller: 'DialogController'
+            })
+            .then(function(answer) {
+                $mdToast.show(
+                    $mdToast.simple()
+                    .content('Demand added!')
+                );
+            }, function() {
+            });
             }
     });
-
 });
-function DialogController($scope, $mdDialog) {
-  $scope.demand = {};
-  $scope.hide = function() {
-    $mdDialog.hide();
-  };
-  $scope.cancel = function() {
-    $mdDialog.cancel();
-  };
-  $scope.answer = function(answer) {
-    $mdDialog.hide(answer);
-  };
-}
 
+myApp.controller('DialogController', function($scope, $mdDialog, $firebase, locLatt, locLng) {
+  var ref = new Firebase("https://googlemapangfbase.firebaseio.com/demands");  
+  var fb = $firebase(ref);
+  $scope.demands = fb.$asArray();
+
+
+    $scope.hide = function() {
+        $mdDialog.hide($scope.demand);
+        $scope.demand.latt = locLatt;
+        $scope.demand.lng = locLng;
+        $scope.demands.$add($scope.demand);
+    };
+    
+    $scope.cancel = function() {
+        $mdDialog.cancel();
+    };
+});
