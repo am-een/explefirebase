@@ -38,7 +38,7 @@ myApp.controller('AppCtrl',  function($scope, $mdDialog, $firebase, $mdToast) {
         <div class="md-actions"> \
             <!-- type=button is needed so form uses submit button --> \
             <md-button type=button ng-click="cancel()">Cancel</md-button> \
-            <md-button class="md-primary" type="submit" ng-click="hide()">Okay</md-button> \
+            <md-button class="md-primary" type="submit" ng-click="hide()" ng-disabled="!(!!demand.comp && !!demand.firstName  && !!demand.lastName && !!demand.description)">Okay</md-button> \
         </div> \
         ';
 

@@ -10,7 +10,7 @@
     <map center="current-location" zoom="8" min-zoom="3" on-click="placeMarker($event)">
     <div ng-repeat="demand in demands">
     <marker ng-cloak id="{{demand.$id}}" position="{{demand.latt}}, {{demand.lng}}" title="{{demand.comp}}" on-click="showInfoWindow(event, 'info')"></marker>
-      <info-window max-width="300" id="info">
+      <info-window max-width="300" id="info" visible-on-marker="{{demand.$id}}">
         <div layout="column" ng-cloak>
           <div id="firstHeading" class="firstHeading">
               <h1 style="padding:0 auto; color: rgb(63,81,181)">{{demand.comp}}</h1>
