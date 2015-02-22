@@ -9,17 +9,15 @@
   <body ng-controller="AppCtrl">
     <map center="current-location" zoom="8" min-zoom="3" on-click="placeMarker($event)">
     <div ng-repeat="demand in demands">
-    <marker ng-cloak id="{{demand.$id}}" position="{{demand.latt}}, {{demand.lng}}" title="{{demand.comp}}" on-click="showInfoWindow(event, '{{demand.$id}}')"></marker>
-      <info-window max-width="300" id="{{demand.$id}}" visible-on-marker="{{demand.$id}}">
-        <div ng-cloak>
+    <marker ng-cloak id="{{demand.$id}}" position="{{demand.latt}}, {{demand.lng}}" title="{{demand.comp}}" on-click="showInfoWindow(event, 'info')"></marker>
+      <info-window max-width="300" id="info">
+        <div layout="column" ng-cloak>
           <div id="firstHeading" class="firstHeading">
-            <h2>
-              <span>{{demand.comp}}</span>
-            </h2>
+              <h1 style="padding:0 auto; color: rgb(63,81,181)">{{demand.comp}}</h1>
           </div>
           <div id="bodyContent">
-            <div><h4>Name:</h4> {{demand.firstName}} {{demand.lastName}}</div>
-            <div><h4>Demand:</h4> {{demand.description}}</div>
+            <p><b>Name:</b> {{demand.firstName}} {{demand.lastName}}</p>
+            <div><b>Demand:</b> {{demand.description}}</div>
             <!--<div>
               <h4>Location:</h4>
               <reverse-geocode lat="{{demand.latt.toString()}}" lng="{{demand.lng.toString()}}"></reverse-geocode>
