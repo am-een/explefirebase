@@ -14,7 +14,7 @@ myApp.controller('AppCtrl',  function($scope, $mdDialog, $firebase, $mdToast) {
 
 
   var dialogContent = '\
-        <md-content> \
+        <md-content class="md-padding"> \
           <md-subheader class="md-primary md-sticky-no-effect"> \
           <h2>Add request</h2> \
           </md-subheader> \
@@ -42,7 +42,7 @@ myApp.controller('AppCtrl',  function($scope, $mdDialog, $firebase, $mdToast) {
         </div> \
         ';
 
-    var addDemDialog = '<md-dialog aria-label="Add request">' + dialogContent + '</md-dialog>';
+    var addDemDialog = '<md-dialog aria-label="Add request" style="width:50%">' + dialogContent + '</md-dialog>';
 
   $scope.$on('mapInitialized', function(evt, evtMap) {
       map = evtMap;
